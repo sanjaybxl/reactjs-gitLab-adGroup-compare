@@ -176,77 +176,107 @@ export default function App() {
   const [gitLabInputs, setGitLabInputs] = useState([{ value: '' }]);
   const [adGroupInputs, setAdGroupInputs] = useState([{ value: '' }]);
 
-  const handleGitLabChange = (event, index) => {
-    const newInputs = [...gitLabInputs];
-    newInputs[index].value = event.target.value;
-    setGitLabInputs(newInputs);
-  };
-
-  const handleAdGroupChange = (event, index) => {
-    const newInputs = [...adGroupInputs];
-    newInputs[index].value = event.target.value;
-    setAdGroupInputs(newInputs);
-  };
-
-  const handleAddGitLabClick = () => {
+  const handleAddGitLabInput = () => {
     setGitLabInputs([...gitLabInputs, { value: '' }]);
   };
 
-  const handleAddAdGroupClick = () => {
+  const handleRemoveGitLabInput = (index) => {
+    const updatedInputs = [...gitLabInputs];
+    updatedInputs.splice(index, 1);
+    setGitLabInputs(updatedInputs);
+  };
+
+  const handleAddAdGroupInput = () => {
     setAdGroupInputs([...adGroupInputs, { value: '' }]);
   };
 
-  const handleCompareClick = () => {
-    // Do whatever you want to do when the Compare button is clicked
-    console.log('GitLab Inputs:', gitLabInputs);
-    console.log('AD Group Inputs:', adGroupInputs);
+  const handleRemoveAdGroupInput = (index) => {
+    const updatedInputs = [...adGroupInputs];
+    updatedInputs.splice(index, 1);
+    setAdGroupInputs(updatedInputs);
+  };
+
+  const handleCompare = () => {
+    // Do something with the inputs here
+    console.log(gitLabInputs, adGroupInputs);
   };
 
   return (
     <div className="top-banner">
-      <Box sx={{ p: 2 }} style={{ paddingTop: '40px' }}>
-        {gitLabInputs.map((input, index) => (
-          <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 2,
+        }}
+        style={{ paddingTop: '40px' }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 2,
+          }}
+        >
+          {gitLabInputs.map((input, index) => (
             <TextField
+              key={`gitlab-${index}`}
               label="GitLab"
               value={input.value}
-              onChange={(event) => handleGitLabChange(event, index)}
-              sx={{ mr: 2 }}
+              onChange={(e) => {
+                const updatedInputs = [...gitLabInputs];
+                updatedInputs[index].value = e.target.value;
+                setGitLabInputs(updatedInputs);
+              }}
             />
-
-            {index === gitLabInputs.length - 1 && (
-              <IconButton color="primary" onClick={handleAddGitLabClick}>
-                <AddIcon />
-              </IconButton>
-            )}
-          </Box>
-        ))}
-
-        {adGroupInputs.map((input, index) => (
-          <Box
-            key={index}
-            sx={{ display: 'flex', alignItems: 'center', mt: 2 }}
-          >
+          ))}
+          <IconButton onClick={handleAddGitLabInput}>
+            <AddIcon />
+          </IconButton>
+          {gitLabInputs.length > 1 && (
+            <IconButton
+              onClick={() => handleRemoveGitLabInput(gitLabInputs.length - 1)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 2,
+          }}
+        >
+          {adGroupInputs.map((input, index) => (
             <TextField
+              key={`adgroup-${index}`}
               label="AD Group"
               value={input.value}
-              onChange={(event) => handleAdGroupChange(event, index)}
-              sx={{ mr: 2 }}
+              onChange={(e) => {
+                const updatedInputs = [...adGroupInputs];
+                updatedInputs[index].value = e.target.value;
+                setAdGroupInputs(updatedInputs);
+              }}
             />
-
-            {index === adGroupInputs.length - 1 && (
-              <IconButton color="primary" onClick={handleAddAdGroupClick}>
-                <AddIcon />
-              </IconButton>
-            )}
-          </Box>
-        ))}
-
-        <Box sx={{ mt: 2 }}>
-          <Button variant="contained" onClick={handleCompareClick}>
-            Compare
-          </Button>
+          ))}
+          <IconButton onClick={handleAddAdGroupInput}>
+            <AddIcon />
+          </IconButton>
+          {adGroupInputs.length > 1 && (
+            <IconButton
+              onClick={() => handleRemoveAdGroupInput(adGroupInputs.length - 1)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
         </Box>
+        <Button variant="contained" onClick={handleCompare}>
+          Compare
+        </Button>
       </Box>
     </div>
   );
